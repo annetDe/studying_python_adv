@@ -1,19 +1,22 @@
 from time import time, sleep
 
 
-def check_time(func, critical_time):
-    '''функция для декорирования методов декорируемого класса'''
-    def helper(*args, **kwargs):
-        start = time()
-        res = func(*args, ** kwargs)  # выполнить декорируемый метод
-        runtime = time() - start
-        if runtime > critical_time:
-            print(f'WARNING! {func.__name__} slow. Time = {runtime} sec.')
-        return res
-    return helper
-
 def DecorTimeCrit(critical_time):
     '''функция  принимает аргумент и возвращает декоратор'''
+
+    def check_time(func, critical_time):
+        '''функция для декорирования методов декорируемого класса'''
+
+        def helper(*args, **kwargs):
+            start = time()
+            res = func(*args, **kwargs)  # выполнить декорируемый метод
+            runtime = time() - start
+            if runtime > critical_time:
+                print(f'WARNING! {func.__name__} slow. Time = {runtime} sec.')
+            return res
+
+        return helper
+
     def decorator(cls):
         def helper(*args, **kwargs):
             for attr_str in dir(cls):  # для всех атрибутов декорируемого класса
